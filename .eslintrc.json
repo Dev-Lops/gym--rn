@@ -27,7 +27,7 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "react/react-in-jsx-scope": "on",
+    "react/react-in-jsx-scope": "2",
     "react/prop-types": "off"
   }
 }

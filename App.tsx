@@ -1,9 +1,10 @@
 import { Roboto_400Regular, Roboto_700Bold, useFonts } from '@expo-google-fonts/roboto';
-import { config } from '@gluestack-ui/config';
-import { Center, GluestackUIProvider, Text } from '@gluestack-ui/themed';
-import { StatusBar, View } from 'react-native';
+
+import { GluestackUIProvider } from '@gluestack-ui/themed';
+import { StatusBar } from 'react-native';
 import { Loading } from '@components/Loading';
 import { SignIn } from '@screens/SignIn';
+import { config } from './config/gluestack-ui.config';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_700Bold, Roboto_400Regular })
