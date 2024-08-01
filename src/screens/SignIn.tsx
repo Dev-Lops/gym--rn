@@ -1,15 +1,23 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-native/no-raw-text */
+import { useNavigation } from '@react-navigation/native';
+import type { AuthNavigatorRoutesProps } from '@routes/auth.routes';
+
 import { Center, Heading, Image, Text, VStack } from '@gluestack-ui/themed';
+import { ScrollView } from '@gluestack-ui/themed';
 
 import BackGroundImg from '@assets/background.png';
 import Logo from '@assets/logo.svg';
 
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
-import { ScrollView } from '@gluestack-ui/themed';
 
 export function SignIn() {
+  const navigation = useNavigation<AuthNavigatorRoutesProps>();
+
+  function handleNewAccount() {
+    navigation.navigate('signUp');
+  }
   return (
     <ScrollView
       contentContainerStyle={{ flexGrow: 1 }}
@@ -55,7 +63,11 @@ export function SignIn() {
             <Text color="$gray100" fontSize="$sm" mb="$3" fontFamily="$body">
               Ainda não possui uma conta?
             </Text>
-            <Button title="Criar conta" variant="outline" />
+            <Button
+              title="Criar conta"
+              variant="outline"
+              onPress={handleNewAccount}
+            />
           </Center>
         </VStack>
       </VStack>
