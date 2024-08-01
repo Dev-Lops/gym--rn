@@ -1,14 +1,19 @@
-import { Input as GlueStackInput, InputField } from "@gluestack-ui/themed";
-import type { ComponentProps } from "react";
+import { Input as GlueStackInput, InputField } from '@gluestack-ui/themed';
+import type { ComponentProps } from 'react';
 
-type Props = ComponentProps<typeof InputField>
+type Props = ComponentProps<typeof InputField>;
 export function Input({ ...rest }: Props) {
   return (
     <GlueStackInput
       bg="$gray700"
-      h="$14" px="$4"
+      h="$14"
+      px="$4"
       borderWidth="$0"
-      borderRadius="$md">
+      borderRadius="$md"
+      $focus={{
+        borderWidth: 1,
+        borderColor: '$green500',
+      }}>
       <InputField
         color="$white"
         fontFamily="$body"
@@ -16,5 +21,5 @@ export function Input({ ...rest }: Props) {
         {...rest}
       />
     </GlueStackInput>
-  )
+  );
 }

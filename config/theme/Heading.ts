@@ -81,35 +81,35 @@ export const Heading = createStyle({
         lineHeight: '$3xl',
       },
 
-      'xl': {
+      xl: {
         //@ts-ignore
         props: { as: H3 },
         fontSize: '$2xl',
         lineHeight: '$3xl',
       },
 
-      'lg': {
+      lg: {
         //@ts-ignore
         props: { as: H4 },
         fontSize: '$xl',
         lineHeight: '$2xl',
       },
 
-      'md': {
+      md: {
         //@ts-ignore
         props: { as: H5 },
         fontSize: '$lg',
         lineHeight: '$lg',
       },
 
-      'sm': {
+      sm: {
         //@ts-ignore
         props: { as: H6 },
         fontSize: '$md',
         lineHeight: '$lg',
       },
 
-      'xs': {
+      xs: {
         //@ts-ignore
         props: { as: H6 },
         fontSize: '$sm',

@@ -1,8 +1,9 @@
-import { Center, Heading, Image, Text, VStack } from "@gluestack-ui/themed";
+/* eslint-disable react-native/no-raw-text */
+import { Center, Heading, Image, Text, VStack } from '@gluestack-ui/themed';
 
-import BackGroundImg from "@assets/background.png"
-import Logo from "@assets/logo.svg"
-import { Input } from "@components/Input";
+import BackGroundImg from '@assets/background.png';
+import Logo from '@assets/logo.svg';
+import { Input } from '@components/Input';
 
 export function SignIn() {
   return (
@@ -20,19 +21,22 @@ export function SignIn() {
         <Center my={'$24'}>
           <Logo size={128} />
 
-          <Text color="$gray100" fontSize={"$sm"}>
+          <Text color="$gray100" fontSize={'$sm'}>
             Treine sua mente e o seu corpo
           </Text>
         </Center>
 
-        <Center gap="$2" >
+        <Center gap="$2">
           <Heading color="$gray100">Acesse a Conta</Heading>
 
-          <Input placeholder="E-mail" />
-          <Input placeholder="Senha" />
+          <Input
+            placeholder="E-mail"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <Input placeholder="Senha" secureTextEntry />
         </Center>
       </VStack>
-
     </VStack>
-  )
+  );
 }
