@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-native/no-raw-text */
 /* eslint-disable react-native/no-inline-styles */
 import { ExerciseCard } from '@components/ExerciseCard';
@@ -12,11 +13,6 @@ export function Home() {
     'Remada curvada',
     'Remada unilateral',
     'Levantamento terra',
-    'Cadeira de rodas',
-    'Puxada lateral',
-    'Pressão de braço',
-    'Pressão de cintura',
-    'Triceps dumbbell',
   ]);
   const [groups, setGroups] = useState([
     'Costas',
@@ -35,7 +31,10 @@ export function Home() {
         renderItem={({ item }) => (
           <Group
             name={item as string}
-            isActive={groupSelected === item}
+            isActive={
+              groupSelected.toLocaleLowerCase() ===
+              (item as string).toLocaleLowerCase()
+            }
             onPress={() => setGroupSelected(item as string)}
           />
         )}
