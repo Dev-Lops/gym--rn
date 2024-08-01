@@ -8,7 +8,7 @@ import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { StatusBar } from 'react-native';
 import { Loading } from '@components/Loading';
 import { config } from './config/gluestack-ui.config';
-import { SignUp } from '@screens/SignUp';
+import { Routes } from '@routes/index';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_700Bold, Roboto_400Regular });
@@ -19,7 +19,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      {fontsLoaded ? <SignUp /> : <Loading />}
+      {fontsLoaded ? <Routes /> : <Loading />}
     </GluestackUIProvider>
   );
 }
