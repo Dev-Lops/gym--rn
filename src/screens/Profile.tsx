@@ -1,34 +1,85 @@
 /* eslint-disable react-native/no-raw-text */
 /* eslint-disable react-native/no-inline-styles */
+import { TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
+
 import { Avatar } from '@components/Avatar';
 import { Button } from '@components/Button';
 import { Input } from '@components/Input';
 import { ScreenHeader } from '@components/ScreenHeader';
+
 import {
   Center,
   Heading,
   ScrollView,
   Text,
+  useToast,
   VStack,
 } from '@gluestack-ui/themed';
-import { TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import { ToastMessage } from '@components/ToastMessage';
 
 export function Profile() {
+  const [userPhoto, setUserPhoto] = useState('https://github.com/dev-lops.png');
+
+  const toast = useToast();
+
+  async function handleUserPhotoSelect() {
+    try {
+      const photoSelected = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      });
+      if (photoSelected.canceled) {
+        return;
+      }
+
+      const photoURI = photoSelected.assets[0].uri;
+
+      if (photoURI) {
+        const photoInfo = (await FileSystem.getInfoAsync(photoURI)) as {
+          size: number;
+        };
+
+        if (photoInfo.size && photoInfo.size / 1024 / 1024 > 5) {
+          return toast.show({
+            placement: 'top',
+            render: ({ id }) => (
+              <ToastMessage
+                id={id}
+                action="error"
+                title="A imagem excede o limite de 5Mb."
+                onClose={() => toast.close(id)}
+                description=""
+              />
+            ),
+          });
+        }
+
+        setUserPhoto(photoURI);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <VStack flex={1}>
       <ScreenHeader title="Perfil" />
       <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
         <Center mt="$6" px="$10">
           <Avatar
-            source={{ uri: 'https://github.com/dev-lops.png' }}
+            source={{ uri: userPhoto }}
             alt="Imagem de perfil do usário"
             size="xl"
           />
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleUserPhotoSelect}>
             <Text
-              color="$green500"
               fontFamily="$heading"
+              color="$green500"
               fontSize="$md"
               mt="$2"
               mb="$8"
