@@ -1,15 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-native/no-raw-text */
 import { Center, Heading, Image, Text, VStack } from '@gluestack-ui/themed';
+import { ScrollView } from '@gluestack-ui/themed';
+import { useNavigation } from '@react-navigation/native';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import BackGroundImg from '@assets/background.png';
 import Logo from '@assets/logo.svg';
 
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
-import { ScrollView } from '@gluestack-ui/themed';
-import { useNavigation } from '@react-navigation/native';
-import { Controller, useForm } from 'react-hook-form';
 
 type FormDataProps = {
   name: string;
@@ -17,6 +19,23 @@ type FormDataProps = {
   password: string;
   password_confirm: string;
 };
+
+const signUpSchema = yup.object({
+  name: yup.string().required('Nome é obrigatório.'),
+  email: yup
+    .string()
+    .required('Email é obrigatório.')
+    .email('Insira um email válido.'),
+  password: yup
+    .string()
+    .required('Senha é obrigatória.')
+    .min(6, 'A senha deve ter pelo menos 6 caracteres.'),
+  password_confirm: yup
+    .string()
+    .required('Confirmação de senha é obrigatória.')
+    .oneOf([yup.ref('password'), ''], 'As senhas devem ser iguais.'),
+});
+
 export function SignUp() {
   const navigation = useNavigation();
 
@@ -24,14 +43,21 @@ export function SignUp() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormDataProps>();
+  } = useForm<FormDataProps>({
+    resolver: yupResolver(signUpSchema),
+  });
 
   function handleReturnToLogin() {
     navigation.goBack();
   }
 
-  function handleSignUp(data: FormDataProps) {
-    console.log(data);
+  function handleSignUp({
+    name,
+    email,
+    password,
+    password_confirm,
+  }: FormDataProps) {
+    console.log(name, email, password, password_confirm);
   }
 
   return (
@@ -63,33 +89,20 @@ export function SignUp() {
             <Controller
               control={control}
               name="name"
-              rules={{
-                required: 'O nome é obrigatório',
-              }}
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Nome"
                   autoCapitalize="none"
                   onChangeText={onChange}
                   value={value}
+                  errorMessage={errors.name?.message}
                 />
               )}
             />
 
-            {errors.name?.message && (
-              <Text color="$white">{errors.name?.message}</Text>
-            )}
-
             <Controller
               control={control}
               name="email"
-              rules={{
-                required: 'O e-mail é obrigatório',
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'E-mail inválido',
-                },
-              }}
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="E-mail"
@@ -97,12 +110,10 @@ export function SignUp() {
                   autoCapitalize="none"
                   onChangeText={onChange}
                   value={value}
+                  errorMessage={errors.email?.message}
                 />
               )}
             />
-            {errors.email?.message && (
-              <Text color="$white">{errors.email?.message}</Text>
-            )}
 
             <Controller
               control={control}
@@ -113,6 +124,7 @@ export function SignUp() {
                   secureTextEntry
                   onChangeText={onChange}
                   value={value}
+                  errorMessage={errors.password?.message}
                 />
               )}
             />
@@ -127,6 +139,7 @@ export function SignUp() {
                   value={value}
                   onSubmitEditing={handleSubmit(handleSignUp)}
                   returnKeyType="send"
+                  errorMessage={errors.password_confirm?.message}
                 />
               )}
             />

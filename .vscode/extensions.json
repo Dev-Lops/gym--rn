@@ -1,6 +1,7 @@
 {
   "recommendations": [
     "kuscamara.remove-unused-imports",
-    "dmitrydorofeev.empty-indent"
+    "dmitrydorofeev.empty-indent",
+    "waderyan.gitblame"
   ]
 }
