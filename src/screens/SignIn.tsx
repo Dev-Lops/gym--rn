@@ -4,7 +4,14 @@ import { useNavigation } from '@react-navigation/native';
 import type { AuthNavigatorRoutesProps } from '@routes/auth.routes';
 import * as yup from 'yup';
 
-import { Center, Heading, Image, Text, VStack } from '@gluestack-ui/themed';
+import {
+  Center,
+  Heading,
+  Image,
+  Text,
+  useToast,
+  VStack,
+} from '@gluestack-ui/themed';
 import { ScrollView } from '@gluestack-ui/themed';
 
 import BackGroundImg from '@assets/background.png';
@@ -14,6 +21,9 @@ import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useAuth } from '@hooks/useAuth';
+import { AppError } from '@utils/AppError';
+import { useState } from 'react';
 
 type FormDataProps = {
   email: string;
@@ -32,7 +42,10 @@ const signInSchema = yup.object({
 });
 
 export function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { signIn } = useAuth();
   const navigation = useNavigation<AuthNavigatorRoutesProps>();
+  const toast = useToast();
 
   const {
     control,
@@ -42,8 +55,21 @@ export function SignIn() {
     resolver: yupResolver(signInSchema),
   });
 
-  function handleSignIn({ email, password }: FormDataProps) {
-    console.log(email, password);
+  async function handleSignIn({ email, password }: FormDataProps) {
+    try {
+      setIsLoading(true);
+      await signIn(email, password);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError ? error.message : 'Falha na autenticação.';
+
+      setIsLoading(false);
+      toast.show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500',
+      });
+    }
   }
 
   function handleNewAccount() {
@@ -106,7 +132,11 @@ export function SignIn() {
               )}
             />
 
-            <Button title="Acessar" onPress={handleSubmit(handleSignIn)} />
+            <Button
+              title="Acessar"
+              onPress={handleSubmit(handleSignIn)}
+              isLoading={isLoading}
+            />
           </Center>
           <Center
             flex={1}
