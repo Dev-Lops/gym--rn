@@ -30,6 +30,7 @@ export function History() {
         : 'Não foi possível carregar os detalhes do exercício';
 
       toast.show({
+        //@ts-ignore
         title,
         placement: 'top',
         bgColor: 'red.500',

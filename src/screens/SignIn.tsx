@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react-native/no-raw-text */
 import { useNavigation } from '@react-navigation/native';
@@ -65,6 +66,7 @@ export function SignIn() {
 
       setIsLoading(false);
       toast.show({
+        //@ts-ignore
         title,
         placement: 'top',
         bgColor: 'red.500',

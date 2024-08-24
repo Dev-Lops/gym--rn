@@ -19,11 +19,18 @@ import {
 } from '@gluestack-ui/themed';
 import { useState } from 'react';
 import { ToastMessage } from '@components/ToastMessage';
+import { Controller, useForm } from 'react-hook-form';
+
+type ProfileSchema = {
+  name: string;
+  email: string;
+};
 
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState('https://github.com/dev-lops.png');
 
   const toast = useToast();
+  const { control, handleSubmit } = useForm();
 
   async function handleUserPhotoSelect() {
     try {
@@ -89,7 +96,19 @@ export function Profile() {
           </TouchableOpacity>
 
           <Center w="$full" gap="$4">
-            <Input placeholder="Nome" bg="$gray600" />
+            <Controller
+              control={control}
+              name="name"
+              render={({ field: { value, onChange } }) => (
+                <Input
+                  placeholder="Nome"
+                  bg="$gray600"
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
+
             <Input
               value="developesanderson@gmail.com"
               bg="$gray600"
