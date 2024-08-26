@@ -27,6 +27,7 @@ import { AppError } from '@utils/AppError';
 import { api } from '@services/api';
 
 import { useAuth } from '@hooks/useAuth';
+import { ToastMessage } from '@components/ToastMessage';
 
 type FormDataProps = {
   name: string;
@@ -81,11 +82,20 @@ export function SignUp() {
         ? error.message
         : 'Não foi possível criar a conta. Tente novamente mais tarde!';
 
-      toast.show({
-        title,
-        placement: 'top',
-        bgColor: 'red.500',
-      });
+      if (toast) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }: { id: string }) => (
+            <ToastMessage
+              id={id}
+              action="error"
+              title={title}
+              onClose={() => toast.close(id)}
+              description=""
+            />
+          ),
+        });
+      }
     }
   }
 

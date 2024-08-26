@@ -24,6 +24,7 @@ import { HomeHeader } from '@components/HomeHeader';
 import { Group } from '@components/Group';
 import { ExerciseCard } from '@components/ExerciseCard';
 import { Loading } from '@components/Loading';
+import { ToastMessage } from '@components/ToastMessage';
 
 export function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -47,12 +48,20 @@ export function Home() {
       const title = isAppError
         ? error.message
         : 'Não foi possivel carregar os grupos musculares';
-
-      toast.show({
-        title,
-        placement: 'top',
-        bgColor: 'red.500',
-      });
+      if (toast) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }: { id: string }) => (
+            <ToastMessage
+              id={id}
+              action="error"
+              title={title}
+              onClose={() => toast.close(id)}
+              description=""
+            />
+          ),
+        });
+      }
     }
   }
 
@@ -68,11 +77,20 @@ export function Home() {
         ? error.message
         : 'Não foi possivel carregar os exercícios';
 
-      toast.show({
-        title,
-        placement: 'top',
-        bgColor: 'red.500',
-      });
+      if (toast) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }: { id: string }) => (
+            <ToastMessage
+              id={id}
+              action="error"
+              title={title}
+              onClose={() => toast.close(id)}
+              description=""
+            />
+          ),
+        });
+      }
     } finally {
       setIsLoading(false);
     }

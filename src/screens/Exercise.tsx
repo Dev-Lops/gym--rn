@@ -29,6 +29,7 @@ import RepetitionsSvg from '@assets/repetitions.svg';
 import { Button } from '@components/Button';
 import { useEffect, useState } from 'react';
 import { Loading } from '@components/Loading';
+import { ToastMessage } from '@components/ToastMessage';
 
 type RouteParamsProps = {
   exerciseID: string;
@@ -60,11 +61,20 @@ export function Exercise() {
         ? error.message
         : 'Não foi possível carregar os detalhes do exercício';
 
-      toast.show({
-        title,
-        placement: 'top',
-        bgColor: 'red.500',
-      });
+      if (toast) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }: { id: string }) => (
+            <ToastMessage
+              id={id}
+              action="error"
+              title={title}
+              onClose={() => toast.close(id)}
+              description=""
+            />
+          ),
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -75,12 +85,20 @@ export function Exercise() {
       setSendingRegister(true);
       await api.post('/history', { exercise_id: exerciseID });
 
-      toast.show({
-        title: 'Parabéns! Exercício registrado no seu histórico.',
-        placement: 'top',
-        bgColor: 'green.500',
-      });
-
+      if (toast) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }: { id: string }) => (
+            <ToastMessage
+              id={id}
+              action="success"
+              title="Parabéns, exercicio registrado no seu histórico!"
+              onClose={() => toast.close(id)}
+              description=""
+            />
+          ),
+        });
+      }
       navigation.navigate('history');
     } catch (error) {
       const isAppError = error instanceof AppError;
@@ -88,11 +106,20 @@ export function Exercise() {
         ? error.message
         : 'Não foi possível registrar o exercício.';
 
-      toast.show({
-        title,
-        placement: 'top',
-        bgColor: 'red.500',
-      });
+      if (toast) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }: { id: string }) => (
+            <ToastMessage
+              id={id}
+              action="error"
+              title={title}
+              onClose={() => toast.close(id)}
+              description=""
+            />
+          ),
+        });
+      }
     } finally {
       setSendingRegister(false);
     }

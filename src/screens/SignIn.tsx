@@ -25,6 +25,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuth } from '@hooks/useAuth';
 import { AppError } from '@utils/AppError';
 import { useState } from 'react';
+import { ToastMessage } from '@components/ToastMessage';
 
 type FormDataProps = {
   email: string;
@@ -65,12 +66,20 @@ export function SignIn() {
       const title = isAppError ? error.message : 'Falha na autenticação.';
 
       setIsLoading(false);
-      toast.show({
-        //@ts-ignore
-        title,
-        placement: 'top',
-        bgColor: 'red.500',
-      });
+      if (toast) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }: { id: string }) => (
+            <ToastMessage
+              id={id}
+              action="error"
+              title={title}
+              onClose={() => toast.close(id)}
+              description=""
+            />
+          ),
+        });
+      }
     }
   }
 

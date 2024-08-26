@@ -4,6 +4,7 @@
 import { HistoryCard } from '@components/HistoryCard';
 import { Loading } from '@components/Loading';
 import { ScreenHeader } from '@components/ScreenHeader';
+import { ToastMessage } from '@components/ToastMessage';
 import type { HistoryByDayDTO } from '@dtos/HistoryByDayDTO';
 import { Heading, SectionList, useToast, VStack } from '@gluestack-ui/themed';
 import { useFocusEffect } from '@react-navigation/native';
@@ -29,12 +30,20 @@ export function History() {
         ? error.message
         : 'Não foi possível carregar os detalhes do exercício';
 
-      toast.show({
-        //@ts-ignore
-        title,
-        placement: 'top',
-        bgColor: 'red.500',
-      });
+      if (toast) {
+        toast.show({
+          placement: 'top',
+          render: ({ id }: { id: string }) => (
+            <ToastMessage
+              id={id}
+              action="error"
+              title={title}
+              onClose={() => toast.close(id)}
+              description=""
+            />
+          ),
+        });
+      }
     } finally {
       setIsLoading(false);
     }
